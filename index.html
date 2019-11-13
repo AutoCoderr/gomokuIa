@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Gomoku IA</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Gomoku : </h1>
+        <div id="choiceParty">
+            Contre qui voulez vous jouez? : <select id="partySelect">
+                                                <option value="ia">l'Ia</option>
+                                                <option value="yourSelf">Vous même</option>
+                                            </select><input type="button" value="Ok" onclick="start()">
+        </div>
+        <div style="display: none;" id="party">
+            <div id="gomoku"></div>
+            <input type="button" value="Restart" onclick="restart()">
+        </div>
+    </body>
+    <script src="gomoku.js"></script>
+    <script src="gomokuIa.js"></script>
+</html>
