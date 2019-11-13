@@ -1,7 +1,7 @@
 function IA() {
 	this.tree = null;
 	this.profondeurMax = 2;
-	this.distanceFromUsedCase = 1;
+	this.distanceFromUsedCase = 2;
 
 	this.startIa = function(callback) {
 		this.tree = {branchs: [], gomoku: gomoku, p: 0, parent: null, toKeep: null};

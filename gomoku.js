@@ -2,7 +2,11 @@
 function displayGomoku() {
     let html = "";
     if (!finish) {
-        html = "C'est au joueur <font color='" + (currentPlayer === 1 ? "red" : "green") + "'>" + currentPlayer + "</font>";
+        if (currentPlayer === 2 && document.getElementById("partySelect").value === "ia") {
+            html = "L'ia est en train de jouer...";
+        } else {
+            html = "C'est au joueur <font color='" + (currentPlayer === 1 ? "red" : "green") + "'>" + currentPlayer + "</font>";
+        }
     }
     html += "<table><tr><th></th>";
     for (let c=0;c<gomoku[0].length;c++) {
@@ -20,10 +24,10 @@ function displayGomoku() {
     }
     html += "</table>";
     document.getElementById("gomoku").innerHTML = html;
-    for (let l=0;l<gomoku.length;l++) {
-        for (let c=0;c<gomoku[l].length;c++) {
-            document.getElementById(l+"-"+c).onclick = function () {
-                if (!finish) {
+    for (let l = 0; l < gomoku.length; l++) {
+        for (let c = 0; c < gomoku[l].length; c++) {
+            document.getElementById(l + "-" + c).onclick = function () {
+                if (currentPlayer === 1 || document.getElementById("partySelect").value !== "ia" || !finish) {
                     clickGomoku(l, c);
                 }
             }
@@ -43,17 +47,21 @@ function clickGomoku(l,c) {
         document.getElementById("gomoku").innerHTML = document.getElementById("gomoku").innerHTML +
                 "<br/>Le gagnant est le joueur <font color='"+(eval.winner === 1 ? "red" : "green")+"'>"+eval.winner+"</font>";
     } else {
-        //displayGomoku();
         currentPlayer = currentPlayer === 1 ? 2 : 1;
+        displayGomoku();
         if (document.getElementById("partySelect").value === "ia" && currentPlayer === 2) {
-            let ia = new IA();
-            ia.startIa((l,c) => {
-                clickGomoku(l,c);
-            });
-        } else {
-            displayGomoku();
+            setTimeout(() => {
+                useIA();
+            }, 20);
         }
     }
+}
+
+function useIA() {
+    let ia = new IA();
+    ia.startIa((l,c) => {
+        clickGomoku(l,c);
+    });
 }
 
 function evalScoreOrGetWinner(gomoku) {
