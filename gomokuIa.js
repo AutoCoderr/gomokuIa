@@ -1,9 +1,11 @@
 function IA() {
 	this.tree = null;
 	this.profondeurMax = 2;
-	this.distanceFromUsedCase = 2;
+	this.distanceFromUsedCase = 1;
 
-	this.startIa = function(callback) {
+	this.startIa = function(profondeurMax, distanceFromUsedCase,callback) {
+		this.profondeurMax = profondeurMax;
+		this.distanceFromUsedCase = distanceFromUsedCase;
 		this.tree = {branchs: [], gomoku: gomoku, p: 0, parent: null, toKeep: null};
 		this.genTreeMinMax(copyTab(gomoku), 0, this.tree, currentPlayer, (l,c) => {
 			console.log(this.tree);
@@ -96,4 +98,16 @@ function copyTab(tab) {
 		}
 	}
 	return tab2;
+}
+
+async function getStringOfTree(tree, callback, p=0) {
+	for (let i=0;i<tree.branchs.length;i++) {
+		tree.branchs[i].parent = null;
+		if (typeof(tree.branchs[i].branchs) == "object") {
+			await getStringOfTree(tree.branchs[i],null, p + 1);
+		}
+	}
+	if (p === 0) {
+		callback(JSON.stringify(tree));
+	}
 }

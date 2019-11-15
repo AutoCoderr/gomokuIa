@@ -58,8 +58,11 @@ function clickGomoku(l,c) {
 }
 
 function useIA() {
+    if (finish) {
+        return;
+    }
     let ia = new IA();
-    ia.startIa((l,c) => {
+    ia.startIa(parseInt(document.getElementById("selectLengthTree").value),parseInt(document.getElementById("selectSpaceFromUsedCase").value),(l,c) => {
         clickGomoku(l,c);
     });
 }
@@ -120,16 +123,31 @@ let finish;
 let currentPlayer;
 let gomoku;
 function start() {
+    let html = "";
+    for(let i=1;i<=5;i++) {
+        html += "<option value='"+i+"'>"+i+"</option>";
+    }
+    document.getElementById("selectLengthTree").innerHTML = html;
+    document.getElementById("selectLengthTree").value = "2";
+
+    document.getElementById("selectSpaceFromUsedCase").innerHTML = html;
+    document.getElementById("selectSpaceFromUsedCase").value = "2";
+
     document.getElementById("choiceParty").style.display = "none";
     document.getElementById("party").style.display = "block";
+
+    if (document.getElementById("partySelect").value === "ia") {
+        document.getElementById("selectLengthTreeDiv").style.display = "block";
+        document.getElementById("selectSpaceFromUsedCaseDiv").style.display = "block";
+    } else {
+        document.getElementById("selectLengthTreeDiv").style.display = "none";
+        document.getElementById("selectSpaceFromUsedCaseDiv").style.display = "none";
+    }
     finish = false;
     currentPlayer = Math.round(Math.random())+1;
     gomoku = genMatrice(15,15);
     if (document.getElementById("partySelect").value === "ia" && currentPlayer === 2) {
-        let ia = new IA();
-        ia.startIa((l,c) => {
-            clickGomoku(l,c);
-        });
+        useIA();
     } else {
         displayGomoku();
     }
@@ -139,12 +157,8 @@ function restart() {
     finish = false;
     currentPlayer = Math.round(Math.random())+1;
     gomoku = genMatrice(15,15);
+    displayGomoku();
     if (document.getElementById("partySelect").value === "ia" && currentPlayer === 2) {
-        let ia = new IA();
-        ia.startIa((l,c) => {
-            clickGomoku(l,c);
-        });
-    } else {
-        displayGomoku();
+        useIA();
     }
 }
